@@ -1,0 +1,260 @@
+[colors]
+background = ${xrdb:color0:#222}
+foreground = ${xrdb:color7:#222}
+foreground-alt = ${xrdb:color7:#222}
+primary = ${xrdb:color1:#222}
+secondary = ${xrdb:color2:#222}
+alert = ${xrdb:color3:#222}
+
+[bar/top]
+;monitor = ${env:MONITOR:DP-2}
+width = 100%
+height = 42
+offset-x = 0
+offset-y = 0
+radius = 0
+fixed-center = true
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 2
+line-color = #f00
+
+border-size = 19
+
+;bottom = true
+;border-top-size = 0
+
+bottom = false
+border-bottom-size = 0
+
+border-color = #00000000
+
+padding-left = 0
+padding-right = 2
+
+module-margin-left = 2
+module-margin-right = 1
+
+font-0 = xos4 Terminus:pixelsize=18;2
+font-1 = icons:fontformat=truetype:size=16:antialias=false;4
+
+modules-left = i3
+modules-center = xwindow
+modules-right = volume cpu memory battery backlight temp net date time powermenu
+
+tray-position = none
+
+[module/temp]
+type = internal/temperature
+interval = 0.5
+thermal-zone = 0
+hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp1_input
+
+format-prefix = " "
+format-prefix-foreground = ${colors.secondary}
+
+label = %temperature-c%
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:75:...%
+
+[module/net]
+type = internal/network
+interface = wlp1s0
+interval = 3.0
+
+format-connected-prefix = " "
+format-connected-prefix-foreground = ${colors.secondary}
+
+format-disconnected = <label-disconnected>
+label-connected = %essid% %downspeed:min:max% %upspeed:min:max%
+
+label-disconnected = NO NET
+label-disconnected-foreground = ${colors.foreground}
+
+[module/i3]
+type = internal/i3
+
+enable-click = true
+strip-wsnumbers = true
+
+ws-icon-0 = 1;a
+ws-icon-1 = 2;b
+ws-icon-2 = 3;c
+ws-icon-3 = 4;d
+ws-icon-4 = 5;e
+
+label-focused = %index%
+label-focused-foreground = ${colors.background}
+label-focused-background = ${colors.secondary}
+label-focused-padding = 2
+
+label-unfocused = %index%
+label-unfocused-padding = 1
+
+label-visible = %index%
+label-visible-padding = 1
+
+label-urgent = %index%
+label-urgent-foreground = ${colors.secondary}
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 1
+
+[module/backlight]
+type = internal/backlight
+
+; Use the following command to list available cards:
+; $ ls -1 /sys/class/backlight/
+card = intel_backlight
+
+; Available tags:
+;   <label> (default)
+;   <ramp>
+;   <bar>
+format = <label>
+
+; Available tokens:
+;   %percentage% (default)
+label = %percentage%%
+
+format-prefix = " "
+format-prefix-foreground = ${colors.secondary}
+
+; Only applies if <bar> is used
+;bar-width = 10
+;bar-indicator = |
+;bar-fill = ─
+;bar-empty = ─
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = " "
+format-prefix-foreground = ${colors.secondary}
+label = %percentage%%
+
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = " "
+format-prefix-foreground = ${colors.secondary}
+label = %percentage_used%%
+
+
+[module/date]
+type = internal/date
+interval = 5
+
+date = "%m/%d"
+
+format-prefix = " "
+format-prefix-foreground = ${colors.secondary}
+
+label = %date%
+
+
+[module/time]
+type = internal/date
+interval = 5
+
+format-prefix = " "
+format-prefix-foreground = ${colors.secondary}
+time = %H:%M
+label = %time%
+
+
+[module/volume]
+type = internal/alsa
+ 
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+ramp-headphones-0 = 
+ramp-headphones-1 = 
+
+format-volume = <ramp-volume> <label-volume>
+label-volume = %percentage%%
+
+format-muted = <label-muted>
+label-muted = muted
+label-muted-foreground = ${colors.alert}
+ramp-volume-foreground = ${colors.secondary}
+
+
+[module/battery]
+type = internal/battery
+
+; This is useful in case the battery never reports 100% charge
+full-at = 99
+
+; Use the following command to list batteries and adapters:
+; $ ls -1 /sys/class/power_supply/
+battery = BAT1
+adapter = ACAD
+poll-interval = 5
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-foreground = ${colors.secondary}
+
+format-charging-prefix-foreground = ${colors.secondary}
+format-charging = <label-charging>
+label-charging = %percentage%%
+
+format-discharging = <ramp-capacity> <label-discharging>
+label-discharging = %percentage%%
+
+format-full = <ramp-capacity> <label-full>
+label-full = %percentage%%
+
+
+[module/powermenu]
+type = custom/menu
+
+format-spacing = 1
+
+label-open =  
+label-open-foreground = ${colors.secondary}
+label-close = 
+label-close-foreground = ${colors.secondary}
+label-separator = |
+label-separator-foreground = ${colors.foreground-alt}
+
+menu-0-0 = reboot
+menu-0-0-exec = menu-open-1
+menu-0-1 = power off
+menu-0-1-exec = menu-open-2
+menu-0-2 = hibernate
+menu-0-2-exec = menu-open-3
+menu-0-3 = suspend
+menu-0-3-exec = menu-open-4
+menu-0-4 = log out
+menu-0-4-exec = menu-open-5
+
+menu-1-0 = do it!
+menu-1-0-exec = systemctl reboot
+
+menu-2-0 = do it!
+menu-2-0-exec = systemctl poweroff
+
+menu-3-0 = do it!
+menu-3-0-exec = systemctl hibernate
+
+menu-4-0 = do it!
+menu-4-0-exec = systemctl suspend
+
+menu-5-0 = do it!
+menu-5-0-exec = i3-msg exit
+
+[settings]
+screenchange-reload = true
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
