@@ -16,14 +16,17 @@ bindsym $mod+Return exec termite
 # Kill focused window
 bindsym $mod+Shift+q kill
 
-# Binds rofi window to $mod+d
+# Binds rofi window to $mod+space
 bindsym $mod+space exec "rofi -show combi"
 
+# Binds file manager to $mod+Shift+f
+bindsym $mod+Shift+f exec "nautilus"
+
 # Set border size for windows
-for_window [class="^.*"] border pixel 4
+for_window [class="^.*"] border pixel 16
 
 # Window gap spacing
-gaps inner 18
+gaps inner 16
 
 # Focus (arrow keys)
 bindsym $mod+Up focus up
@@ -31,11 +34,11 @@ bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Right focus right
 
-# Focus (UP: I | LEFT: J | DOWN: K | Right: L) Done for comfort of RAlt mod 
-bindsym $mod+i focus up
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus right
+# Focus (WASD)
+bindsym $mod+w focus up
+bindsym $mod+a focus left
+bindsym $mod+s focus down
+bindsym $mod+d focus right
 
 # Move (arrow keys)
 bindsym $mod+Shift+Up move up
@@ -43,11 +46,11 @@ bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Right move right
 
-# Focus (UP: I | LEFT: J | DOWN: K | Right: L) Done for comfort of RAlt mod
-bindsym $mod+Shift+i move up
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move right
+# Move (WASD)
+bindsym $mod+Shift+w move up
+bindsym $mod+Shift+a move left
+bindsym $mod+Shift+s move down
+bindsym $mod+Shift+d move right
 
 # Split in horizontal orientation
 bindsym $mod+h split h
@@ -59,18 +62,18 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen toggle
 
 # Change container layout (stacked, tabbed, toggle split)
-bindsym $mod+Shift+s layout stacking
-bindsym $mod+Shift+t layout tabbed
-bindsym $mod+Shift+e layout toggle split
+#bindsym $mod+Shift+i layout stacking
+#bindsym $mod+Shift+o layout tabbed
+#bindsym $mod+Shift+p layout toggle split
 
 # Toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
 
 # Focus the parent container
-bindsym $mod+a focus parent
+bindsym $mod+p focus parent
 
 # Focus the child container
-#bindsym $mod+d focus child
+#bindsym $mod+c focus child
 
 # Switch to workspace
 bindsym $mod+1 workspace 1
@@ -102,6 +105,9 @@ bindsym $mod+Shift+c reload
 # Restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
 # Resize window (you can also use the mouse for that)
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
@@ -110,6 +116,7 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
+
         bindsym j resize shrink width 10 px or 10 ppt
         bindsym k resize grow height 10 px or 10 ppt
         bindsym l resize shrink height 10 px or 10 ppt
@@ -136,25 +143,23 @@ bindsym $mod+r mode "resize"
 set_from_resource $fg i3wm.color7 #f0f0f0
 set_from_resource $rg i3wm.color4 #f0f0f0
 set_from_resource $bg i3wm.color2 #f0f0f0
+set_from_resource $tg i3wm.color1 #f0f0f0
 
 # class                 border  backgr. text indicator child_border
-client.focused          $bg     $bg     $fg  $bg       $bg
-client.focused_inactive $bg     $bg     $fg  $bg       $bg
-client.unfocused        $bg     $bg     $fg  $bg       $rg
+client.focused          #00000000     #00000000     #00000000  #00000050       #00000050
+client.focused_inactive #00000000     #00000000     #00000000  #00000000       #00000000
+client.unfocused        #00000000     $bg     $fg  $bg       #00000000
 client.urgent           $bg     $bg     $fg  $bg       $bg
 client.placeholder      $bg     $bg     $fg  $bg       $bg
-
 client.background       $bg
 
 # Floating windows
 for_window [class="Pavucontrol"] floating enable
 for_window [class="Kalu"] floating enable
 
-# Multimedia Keys
-
 # Brightness
-bindsym XF86MonBrightnessUp exec xbacklight -inc 5
-bindsym XF86MonBrightnessDown exec xbacklight -dec 5
+bindsym XF86MonBrightnessUp exec light -A 5
+bindsym XF86MonBrightnessDown exec light -U 5
 
 # Volume
 bindsym XF86AudioRaiseVolume exec amixer -D pulse sset Master 5%+ && pkill -RTMIN+1 i3blocks
@@ -179,26 +184,21 @@ bindsym $mod+F7 exec mocp --previous
 bindsym $mod+F8 exec mocp --next
 
 # App shortcuts
-bindsym $mod+n exec "/usr/bin/nautilus"
+bindsym $mod+l exec "/usr/bin/i3lock-fancy -dt ''"
 
 # Redirect sound to headphones
 bindsym $mod+m exec "/usr/local/bin/switch-audio-port"
 
-# Take a scerenshot of a screen region and copy it to a clipboard
-bindsym --release $mod+bar exec "scregcp -s $HOME/Pictures/Screenshots/"
+bindsym --release $mod+bar exec "maim -u -s | convert - +swap -background none -layers merge +repage ~/Pictures/Screenshots/$(date +%s).png png /dev/stdout | xclip -selection clipboard -t image/png"
 
-# Take a screenshot of a whole region and copy it to a clipboard
-bindsym --release $mod+Shift+bar exec "scregcp $HOME/Pictures/Screenshots/"
+bindsym --release $mod+Shift+bar exec "maim -u | convert - \( +clone -background black -shadow 80x3+5+5 \) +swap \
+	-background none -layers merge +repage ~/Pictures/Screenshots/$(date +%s).png /dev/stdout | xclip -selection clipboard -t image/png"
 
 # Autostart apps
-exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec --no-startup-id nm-applet
 exec --no-startup-id "nitrogen --restore"
-exec --no-startup-id "sleep 5s && kalu"
 exec_always --no-startup-id "sh ~/.config/i3/polybar.sh &"
 exec_always --no-startup-id "xmodmap -e 'clear Lock' #ensures you're not stuck in CAPS on mode"
 exec_always --no-startup-id "xmodmap -e 'keycode 0x42=Escape' #remaps the keyboard so CAPS LOCK=ESC"
 exec_always --no-startup-id "xmodmap -e 'keycode Escape=0x42' #remaps the keyboard so ESC=CAPS LOCK"
 exec_always --no-startup-id "wal -R"
-exec_always --no-startup-id "wal -g -R"
 exec_always --no-startup-id "compton &"
