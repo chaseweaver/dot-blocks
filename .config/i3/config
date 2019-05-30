@@ -110,13 +110,6 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 
 # Resize window (you can also use the mouse for that)
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
-
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-
         bindsym j resize shrink width 10 px or 10 ppt
         bindsym k resize grow height 10 px or 10 ppt
         bindsym l resize shrink height 10 px or 10 ppt
@@ -140,15 +133,32 @@ bindsym $mod+r mode "resize"
 # from the generated scheme.
 # NOTE: The '#f0f0f0' in the lines below is the color i3 will use if
 # it fails to get colors from Xresources.
-set_from_resource $fg i3wm.color7 #f0f0f0
-set_from_resource $rg i3wm.color4 #f0f0f0
-set_from_resource $bg i3wm.color2 #f0f0f0
-set_from_resource $tg i3wm.color1 #f0f0f0
+set_from_resource $fg  i3wm.color7  #f0f0f0
+set_from_resource $rg  i3wm.color4  #f0f0f0
+set_from_resource $bg  i3wm.color2  #f0f0f0
+set_from_resource $tg  i3wm.color1  #f0f0f0
+set_from_resource $c0  i3wm.color0  #f0f0f0
+set_from_resource $c1  i3wm.color1  #f0f0f0
+set_from_resource $c2  i3wm.color2  #f0f0f0
+set_from_resource $c3  i3wm.color3  #f0f0f0
+set_from_resource $c4  i3wm.color4  #f0f0f0
+set_from_resource $c5  i3wm.color5  #f0f0f0
+set_from_resource $c6  i3wm.color6  #f0f0f0
+set_from_resource $c7  i3wm.color7  #f0f0f0
+set_from_resource $c8  i3wm.color8  #f0f0f0
+set_from_resource $c9  i3wm.color9  #f0f0f0
+set_from_resource $c10 i3wm.color10 #f0f0f0
+set_from_resource $c11 i3wm.color11 #f0f0f0
+set_from_resource $c12 i3wm.color12 #f0f0f0
+set_from_resource $c13 i3wm.color13 #f0f0f0
+set_from_resource $c14 i3wm.color14 #f0f0f0
+set_from_resource $c15 i3wm.color15 #f0f0f0
+
 
 # class                 border  backgr. text indicator child_border
-client.focused          #00000000     #00000000     #00000000  #00000050       #00000050
-client.focused_inactive #00000000     #00000000     #00000000  #00000000       #00000000
-client.unfocused        #00000000     $bg     $fg  $bg       #00000000
+client.focused          $c0     $c0     $fg  $c0       $c0
+client.focused_inactive $c0     $c0     $fg  $c0       $c0
+client.unfocused        $c0     $bg     $fg  $c0       $c0
 client.urgent           $bg     $bg     $fg  $bg       $bg
 client.placeholder      $bg     $bg     $fg  $bg       $bg
 client.background       $bg
