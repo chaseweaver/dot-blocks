@@ -1,5 +1,6 @@
 # Modifier key
 set $mod Mod1
+set $mod2 Mod4
 
 # Font for window titles.
 font pango:monospace 9
@@ -110,16 +111,16 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 
 # Resize window (you can also use the mouse for that)
 mode "resize" {
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym ntilde resize grow width 10 px or 10 ppt
+        bindsym j resize shrink width 4 px or 4 ppt
+        bindsym k resize grow height 4 px or 4 ppt
+        bindsym l resize shrink height 4 px or 4 ppt
+        bindsym ntilde resize grow width 4 px or 4 ppt
 
         # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
+        bindsym Left resize shrink width 4 px or 4 ppt
+        bindsym Down resize grow height 4 px or 4 ppt
+        bindsym Up resize shrink height 4 px or 4 ppt
+        bindsym Right resize grow width 4 px or 4 ppt
 
         # back to normal: Enter or Escape
         bindsym Return mode "default"
@@ -156,9 +157,9 @@ set_from_resource $c15 i3wm.color15 #f0f0f0
 
 
 # class                 border  backgr. text indicator child_border
-client.focused          $c0     $c0     $fg  $c0       $c0
-client.focused_inactive $c0     $c0     $fg  $c0       $c0
-client.unfocused        $c0     $bg     $fg  $c0       $c0
+client.focused          #00000035     $bg     $fg  #00000035       #00000035
+client.focused_inactive #00000035     $bg     $fg  #00000035       #00000035
+client.unfocused        #00000055     $bg     $fg  #00000055       #00000055
 client.urgent           $bg     $bg     $fg  $bg       $bg
 client.placeholder      $bg     $bg     $fg  $bg       $bg
 client.background       $bg
@@ -172,15 +173,19 @@ bindsym XF86MonBrightnessUp exec light -A 5
 bindsym XF86MonBrightnessDown exec light -U 5
 
 # Volume
-bindsym XF86AudioRaiseVolume exec amixer -D pulse sset Master 5%+ && pkill -RTMIN+1 i3blocks
-bindsym XF86AudioLowerVolume exec amixer -D pulse sset Master 5%- && pkill -RTMIN+1 i3blocks
+bindsym XF86AudioRaiseVolume exec amixer -D pulse sset Master 2%+ && pkill -RTMIN+1 i3blocks
+bindsym XF86AudioLowerVolume exec amixer -D pulse sset Master 2%- && pkill -RTMIN+1 i3blocks
 
 # Granular volume control
-bindsym $mod+XF86AudioRaiseVolume exec amixer -D pulse sset Master 1%+ && pkill -RTMIN+1 i3blocks
-bindsym $mod+XF86AudioLowerVolume exec amixer -D pulse sset Master 1%- && pkill -RTMIN+1 i3blocks
+# bindsym $mod+XF86AudioRaiseVolume exec amixer -D pulse sset Master 1%+ && pkill -RTMIN+1 i3blocks
+# bindsym $mod+XF86AudioLowerVolume exec amixer -D pulse sset Master 1%- && pkill -RTMIN+1 i3blocks
+
+# bindsym $mod+XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+# bindsym $mod+XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
 
 # Mute
 bindsym XF86AudioMute exec amixer sset Master toggle && killall -USR1 i3blocks
+# bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 
 bindsym XF86AudioPlay exec mocp --toggle-pause
 bindsym XF86AudioPause exec mocp --toggle-pause
@@ -199,16 +204,21 @@ bindsym $mod+l exec "/usr/bin/i3lock-fancy -dt ''"
 # Redirect sound to headphones
 bindsym $mod+m exec "/usr/local/bin/switch-audio-port"
 
-bindsym --release $mod+bar exec "maim -u -s | convert - +swap -background none -layers merge +repage ~/Pictures/Screenshots/$(date +%s).png png /dev/stdout | xclip -selection clipboard -t image/png"
 
-bindsym --release $mod+Shift+bar exec "maim -u | convert - \( +clone -background black -shadow 80x3+5+5 \) +swap \
-	-background none -layers merge +repage ~/Pictures/Screenshots/$(date +%s).png /dev/stdout | xclip -selection clipboard -t image/png"
+# Desktop screenshot
+bindsym --release $mod+Shift+bar exec "scrot ~/Pictures/Screenshots/$(date --iso-8601='seconds').png -m -e 'xclip -selection c -t image/png < $f'"
+
+# Selection screenshot
+bindsym --release $mod+bar exec "scrot ~/Pictures/Screenshots/$(date --iso-8601='seconds').png -s -e 'xclip -selection c -t image/png < $f'"
+
 
 # Autostart apps
 exec --no-startup-id "nitrogen --restore"
+exec --no-startup-id "dunst -config ~/.config/wal/temlpates/dunstrc"
 exec_always --no-startup-id "sh ~/.config/i3/polybar.sh &"
 exec_always --no-startup-id "xmodmap -e 'clear Lock' #ensures you're not stuck in CAPS on mode"
 exec_always --no-startup-id "xmodmap -e 'keycode 0x42=Escape' #remaps the keyboard so CAPS LOCK=ESC"
 exec_always --no-startup-id "xmodmap -e 'keycode Escape=0x42' #remaps the keyboard so ESC=CAPS LOCK"
 exec_always --no-startup-id "wal -R"
 exec_always --no-startup-id "compton &"
+exec_always --no-startup-id "auto_monitor"
